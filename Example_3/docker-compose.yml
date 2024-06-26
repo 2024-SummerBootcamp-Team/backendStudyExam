@@ -1,0 +1,71 @@
+# docker-compose.yml 파일은 컨테이너를 실행하기 위한 설정 파일
+
+# 버전 설정
+version: "3"
+
+# 서비스 설정
+services:
+
+# 서비스의 이름, 컨테이너의 이름과 다를 수 있음
+
+# 데이터베이스 컨테이너
+  mysql:
+    # 컨테이너의 이름
+    container_name: mysql
+    # 사용할 이미지, docker hub에 있는 이미지를 사용할 수도 있고, Dockerfile을 통해 빌드한 이미지를 사용할 수도 있음
+    image: mysql/mysql-server:latest
+    # 환경 변수 설정
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pw
+      MYSQL_DATABASE: sample
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test_pw
+    # 실행 시 옵션 설정
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    # 사용할 포트 설정
+    ports:
+      - "3306:3306"
+    # 네트워크 설정
+    networks:
+      - db_network
+    # 컨테이너 재시작 설정
+    restart: always
+
+# 백엔드 컨테이너
+  spring-boot:
+    container_name: todo-server
+  # 새로 빌드하려고 할 때 사용, 의존성 문제로 기존 이미지 사용
+  # build: ./todo-server
+  # image: todo-server
+    image: tkdals0978/todo-server
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - db_network
+
+# 프론트 엔드 컨테이너
+  react:
+    container_name: todo-client
+    build: ./todo-client
+    image: todo-client
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - db_network
+
+# 네트워크 설정
+networks:
+  db_network:
+    driver: bridge
+
+
+# 컴포즈 설정 주의사항
+# 1. 컨테이너 이름은 중복되지 않도록 설정
+# 2. 컨테이너 이름과 이미지 이름은 소문자로 설정
+# 3. 설정 이름 뒤에는 ':'을 붙인다. ex) 'mysql:latest
+# 4. 여러 항목 기재 시 '-'로 구분
