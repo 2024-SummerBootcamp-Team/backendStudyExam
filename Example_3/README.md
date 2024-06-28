@@ -23,7 +23,7 @@
 
 # MacOS 유저 설정 (필수)
 
-*todo-server/docker-compose.yml 파일 수정*
+*docker-compose.yml 파일 수정*
 
 21번째 줄 <br/>
 (기존) `image: tkdals0978/todo-server` <br/>
@@ -35,7 +35,7 @@ $ git clone https://github.com/sangminlee98/api-practice.git
 ```
 
 ```bash
-$ cd api-practice/todo-server
+$ cd backendStudyExam/Example_3
 ```
 
 ```bash
