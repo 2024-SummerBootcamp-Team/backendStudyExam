@@ -35,7 +35,7 @@ $ git clone https://github.com/sangminlee98/api-practice.git
 ```
 
 ```bash
-$ cd api-practice
+$ cd backendStudyExam/Example_3
 ```
 
 ```bash
