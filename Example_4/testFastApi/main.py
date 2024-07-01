@@ -1,3 +1,5 @@
+from datetime import timezone, datetime
+
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models import TeamHMember
@@ -36,7 +38,7 @@ async def add_member(member: MemberCreate, db: Session = Depends(get_db)):
     db_member = db.query(TeamHMember).filter(member.name == TeamHMember.name).first()
     if db_member:
         raise HTTPException(status_code=400, detail="팀원 이름이 이미 있어요!")
-    new_member = TeamHMember(name=member.name)
+    new_member = TeamHMember(name=member.name, text="굿잡", created_at=datetime.now())
     db.add(new_member)
     db.commit()
     db.refresh(new_member)
